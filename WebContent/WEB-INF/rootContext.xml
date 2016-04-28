@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<!-- Apache Commons DJBC2 DataSource -->
+	<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+		<property name="url" value="jdbc:hsqldb:hsql://localhost/cpsc476;ifexists=true" />
+		<property name="username" value="SA" />
+		<property name="password" value="Passw0rd" />
+		<property name="initialSize" value="3"/>
+	</bean>
+
+	<!-- DAO objects -->
+ 	<bean name="accountDAO" class="calendar.DAL.AccountDAO">
+ 		<property name="dataSource" ref="dataSource" />
+ 	</bean>
+ 	<bean name="attendanceDAO" class="calendar.DAL.AttendanceDAO">
+ 		<property name="dataSource" ref="dataSource" />
+ 	</bean>
+ 	<bean name="eventDAO" class="calendar.DAL.EventDAO">
+ 		<property name="dataSource" ref="dataSource" />
+ 	</bean>
+ 	
+</beans>
