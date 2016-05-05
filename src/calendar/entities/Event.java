@@ -1,9 +1,17 @@
-package calendar.model;
+package calendar.entities;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Event implements Comparable<Event> {
+import javax.persistence.Basic;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+public class Event implements Serializable {
 	
+    private static final long serialVersionUID = 1L;
+    
 	private Integer eventId;
 	private Integer creatorAccountId;
 	private String eventName;
@@ -12,6 +20,8 @@ public class Event implements Comparable<Event> {
 	private String eventState;
 	private LocalDateTime eventTime;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Integer getEventId() {
 		return eventId;
 	}
@@ -20,6 +30,7 @@ public class Event implements Comparable<Event> {
 		this.eventId = eventId;
 	}
 	
+	@Basic(optional = false)
 	public Integer getCreatorAccountId() {
 		return creatorAccountId;
 	}
@@ -28,6 +39,7 @@ public class Event implements Comparable<Event> {
 		this.creatorAccountId = creatorAccountId;
 	}
 
+	@Basic(optional = false)
 	public String getEventName() {
 		return eventName;
 	}
@@ -36,6 +48,7 @@ public class Event implements Comparable<Event> {
 		this.eventName = eventName;
 	}
 
+	@Basic(optional = false)
 	public String getEventStreetAddress() {
 		return eventStreetAddress;
 	}
@@ -44,6 +57,7 @@ public class Event implements Comparable<Event> {
 		this.eventStreetAddress = eventStreetAddress;
 	}
 
+	@Basic(optional = false)
 	public String getEventCity() {
 		return eventCity;
 	}
@@ -52,6 +66,7 @@ public class Event implements Comparable<Event> {
 		this.eventCity = eventCity;
 	}
 
+	@Basic(optional = false)
 	public String getEventState() {
 		return eventState;
 	}
@@ -60,6 +75,7 @@ public class Event implements Comparable<Event> {
 		this.eventState = eventState;
 	}
 
+	@Basic(optional = false)
 	public LocalDateTime getEventTime() {
 		return eventTime;
 	}
@@ -80,9 +96,9 @@ public class Event implements Comparable<Event> {
 		this.eventTime = time;
 	}
 	
-	@Override
 	public int compareTo(Event o) {
 		// TODO Auto-generated method stub
 		return this.getEventTime().compareTo(o.getEventTime());
 	}
+
 }

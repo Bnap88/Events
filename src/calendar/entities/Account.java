@@ -1,9 +1,21 @@
-package calendar.model;
+package calendar.entities;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Account {
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "Account")
+public class Account implements Serializable{
+
+    private static final long serialVersionUID = 1L;
+    
 	private Integer accountId;
 	private String accountName;
 	private String accountEmail;
@@ -33,6 +45,8 @@ public class Account {
 		this.accountActiveState = true;
 	}
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Integer getAccountId() {
 		return accountId;
 	}
@@ -41,6 +55,7 @@ public class Account {
 		this.accountId = accountId;
 	}
 
+	@Basic(optional = false)
 	public String getAccountName() {
 		return accountName;
 	}
@@ -49,6 +64,7 @@ public class Account {
 		this.accountName = accountName;
 	}
 
+	@Basic(optional = false)
 	public String getAccountEmail() {
 		return accountEmail;
 	}
@@ -57,6 +73,7 @@ public class Account {
 		this.accountEmail = accountEmail;
 	}
 
+	@Basic(optional = false)
 	public byte[] getAccountPasswordHash() {
 		return accountPasswordHash;
 	}
@@ -65,6 +82,7 @@ public class Account {
 		this.accountPasswordHash = accountPasswordHash;
 	}
 
+	@Basic(optional = false)
 	public byte[] getAccountSalt() {
 		return accountSalt;
 	}
@@ -73,6 +91,7 @@ public class Account {
 		this.accountSalt = accountSalt;
 	}
 
+	@Basic(optional = false)
 	public Boolean getAccountActiveState() {
 		return accountActiveState;
 	}
@@ -81,6 +100,7 @@ public class Account {
 		this.accountActiveState = accountActiveState;
 	}
 
+	@Basic(optional = false)
 	public LocalDateTime getAccountCreated() {
 		return accountCreated;
 	}
@@ -88,4 +108,5 @@ public class Account {
 	public void setAccountCreated(LocalDateTime accountCreated) {
 		this.accountCreated = accountCreated;
 	}
+	
 }
