@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import calendar.DAL.AccountDAO;
 import calendar.DAL.AttendanceDAO;
 import calendar.DAL.EventDAO;
+import calendar.DAL.IAccountDAO;
+import calendar.DAL.IAttendanceDAO;
+import calendar.DAL.IEventDAO;
 import calendar.helper.PasswordUtility;
 import calendar.model.Account;
 import calendar.model.Attendance;
@@ -26,11 +29,11 @@ import calendar.model.viewmodel.EventListing;
 @Controller
 public class EventController {
 
-	private AccountDAO accountDAO;
-	private EventDAO eventDAO;
-	private AttendanceDAO attendanceDAO;
+	private IAccountDAO accountDAO;
+	private IEventDAO eventDAO;
+	private IAttendanceDAO attendanceDAO;
 	
-	public EventController(AccountDAO accountDAO, EventDAO eventDAO, AttendanceDAO attendanceDAO)
+	public EventController(IAccountDAO accountDAO, IEventDAO eventDAO, IAttendanceDAO attendanceDAO)
 	{
 		this.accountDAO = accountDAO;
 		this.eventDAO = eventDAO;

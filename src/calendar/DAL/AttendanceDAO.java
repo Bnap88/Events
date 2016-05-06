@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -12,8 +14,74 @@ import calendar.model.Account;
 import calendar.model.Attendance;
 import calendar.model.Event;
 
-public class AttendanceDAO extends JdbcDaoSupport implements IAttendanceDAO {
+public class AttendanceDAO implements IAttendanceDAO {
+	
+	private SessionFactory sessionFactory;
+	
+	public Session session(){
+		return sessionFactory.getCurrentSession();
+	}
+	
+	public AttendanceDAO(SessionFactory sessionFactory)
+	{
+		this.sessionFactory = sessionFactory;
+	}
 
+	@Override
+	public Boolean insertAttendance(Attendance attendance) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean updateAttendance(Attendance attendance) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean deleteAttendance(int accountId, int eventId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Attendance selectAttendanceByIds(int accountId, int eventId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Attendance> selectAttendancesByEventId(int eventId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Event> selectCorrespondingLikedEventsByAccountId(int accountId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Attendance> selectAttendanceByAccountId(int accountId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getAttendeeNamesViaEventId(int eventId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Account> selectAllAccounts() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
 	@Override
 	public Boolean insertAttendance(Attendance attendance) {
 		String sql = "INSERT INTO ATTENDANCE (accountId, eventId) VALUES (?, ?)";
@@ -105,4 +173,6 @@ public class AttendanceDAO extends JdbcDaoSupport implements IAttendanceDAO {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	*/
 }

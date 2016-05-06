@@ -14,17 +14,23 @@ import org.springframework.transaction.annotation.Transactional;
 import calendar.model.Account;
 
 @Transactional
-public class AccountDAO extends JdbcDaoSupport implements IAccountDAO {
+public class AccountDAO implements IAccountDAO {
 	
-	@Autowired
 	private SessionFactory sessionFactory;
 	
 	public Session session(){
 		return sessionFactory.getCurrentSession();
 	}
-
+	
+	public AccountDAO(SessionFactory sessionFactory)
+	{
+		this.sessionFactory = sessionFactory;
+	}
+	
+	/*
 	@Override
 	public Boolean insertAccount(Account account) {
+		
 		
 		String sql = "INSERT INTO Account " +
 		"(accountName, accountEmail, accountPasswordHash, accountSalt, accountCreated, accountActiveState) " +
@@ -38,8 +44,10 @@ public class AccountDAO extends JdbcDaoSupport implements IAccountDAO {
 			return true;
 		else
 			return false;
-	}
+			
+	}*/
 
+	/*
 	@Override
 	public Boolean updateAccount(Account account) {
 		
@@ -54,8 +62,9 @@ public class AccountDAO extends JdbcDaoSupport implements IAccountDAO {
 			return true;
 		else
 			return false;
-	}
+	}*/
 
+	/*
 	@Override
 	public Boolean deleteAccount(int accountId) {
 		
@@ -67,7 +76,7 @@ public class AccountDAO extends JdbcDaoSupport implements IAccountDAO {
 			return true;
 		else
 			return false;
-	}
+	}*/
 
 	@Override
 	public Account selectAccountById(int accountId) {
@@ -86,6 +95,37 @@ public class AccountDAO extends JdbcDaoSupport implements IAccountDAO {
 	}
 
 	@Override
+	public Boolean insertAccount(Account account) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean updateAccount(Account account) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean deleteAccount(int accountId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Account> selectAllAccounts() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean checkIfAccountNameExists(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	@Override
 	public List<Account> selectAllAccounts() {
 		
 		String sql = "SELECT * FROM Account";
@@ -93,8 +133,9 @@ public class AccountDAO extends JdbcDaoSupport implements IAccountDAO {
 		List<Account> accounts = getJdbcTemplate().query(sql, new BeanPropertyRowMapper<Account>(Account.class));
 		
 		return accounts;
-	}
+	}*/
 
+	/*
 	@Override
 	public Boolean checkIfAccountNameExists(String accountName) {
 		
@@ -107,5 +148,5 @@ public class AccountDAO extends JdbcDaoSupport implements IAccountDAO {
 			result = true;
 		
 		return result;
-	}
+	}*/
 }

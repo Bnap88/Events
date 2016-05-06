@@ -1,5 +1,7 @@
 package calendar.DAL;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import calendar.model.Event;
@@ -7,8 +9,56 @@ import calendar.model.Event;
 import java.sql.Timestamp;
 import java.util.List;
 
-public class EventDAO extends JdbcDaoSupport implements IEventDAO {
+public class EventDAO implements IEventDAO {
+	
+	private SessionFactory sessionFactory;
+	
+	public Session session(){
+		return sessionFactory.getCurrentSession();
+	}
+	
+	public EventDAO(SessionFactory sessionFactory)
+	{
+		this.sessionFactory = sessionFactory;
+	}
 
+	@Override
+	public Boolean insertEvent(Event event) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean updateEvent(Event event) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean deleteEvent(int eventId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Event selectEventById(int eventId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Event> selectEventsByCreatorId(int creatorId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Event> selectAllEvents() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
 	@Override
 	public Boolean insertEvent(Event event) {
 		
@@ -76,4 +126,5 @@ public class EventDAO extends JdbcDaoSupport implements IEventDAO {
 	
 		return getJdbcTemplate().query(sql, new EventRowMapper());
 	}
+	*/
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import calendar.DAL.AccountDAO;
+import calendar.DAL.IAccountDAO;
 import calendar.helper.PasswordUtility;
 import calendar.model.Account;
 import calendar.model.formmodel.LogInFormObject;
@@ -26,10 +27,9 @@ import calendar.model.formmodel.LogInFormObject;
 @RequestMapping("account")
 public class AccountController {
 	
-	@Autowired
-	private AccountDAO accountDAO;
+	private IAccountDAO accountDAO;
 	
-	public AccountController(AccountDAO accountDAO) {
+	public AccountController(IAccountDAO accountDAO) {
 		this.accountDAO = accountDAO;
 	}
 	
