@@ -3,13 +3,25 @@ package calendar.DAL;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import calendar.model.Account;
 
+@Transactional
 public class AccountDAO extends JdbcDaoSupport implements IAccountDAO {
+	
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	public Session session(){
+		return sessionFactory.getCurrentSession();
+	}
 
 	@Override
 	public Boolean insertAccount(Account account) {
@@ -60,9 +72,7 @@ public class AccountDAO extends JdbcDaoSupport implements IAccountDAO {
 	@Override
 	public Account selectAccountById(int accountId) {
 		
-		String sql = "SELECT * FROM Account WHERE accountId = ?";
-		
-		Account account = (Account) getJdbcTemplate().queryForObject(sql, new Object[] { accountId }, new AccountRowMapper());
+		Account account = (Account) this.session().get(Account.class, accountId);
 		
 		return account;
 	}
@@ -70,20 +80,9 @@ public class AccountDAO extends JdbcDaoSupport implements IAccountDAO {
 	@Override
 	public Account selectAccountByName(String accountName) {
 		
-		String sql = "SELECT * FROM Account WHERE accountName = ?";
-		try {
-		Account account = (Account) getJdbcTemplate().queryForObject(sql, new Object[] { accountName }, new AccountRowMapper());
+		Account account = (Account) this.session().get(Account.class, accountName);
 		
 		return account;
-		}
-		catch(EmptyResultDataAccessException e)
-		{
-			return null;
-		}
-		catch(Exception e)
-		{
-			return null;
-		}	
 	}
 
 	@Override
