@@ -1,14 +1,11 @@
 package calendar.DAL;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 
 import calendar.model.Account;
 import calendar.model.Attendance;
@@ -16,15 +13,14 @@ import calendar.model.Event;
 
 public class AttendanceDAO implements IAttendanceDAO {
 	
-	private SessionFactory sessionFactory;
+	@PersistenceUnit
+	EntityManagerFactory entityManagerFactory;
 	
-	public Session session(){
-		return sessionFactory.getCurrentSession();
-	}
+	public AttendanceDAO() {}
 	
-	public AttendanceDAO(SessionFactory sessionFactory)
+	public AttendanceDAO(EntityManagerFactory entityManagerFactory)
 	{
-		this.sessionFactory = sessionFactory;
+		this.entityManagerFactory = entityManagerFactory;
 	}
 
 	@Override

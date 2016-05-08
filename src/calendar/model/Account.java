@@ -5,11 +5,14 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import calendar.converter.LocalDateTimeAttributeConverter;
 
 @Entity
 @Table(name = "Account")
@@ -17,15 +20,17 @@ public class Account implements Serializable{
 
     private static final long serialVersionUID = 1L;
     
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    @Column(name="accountid")
 	private Integer accountId;
+	
+	@Column(unique=true)
 	private String accountName;
 	private String accountEmail;
 	private byte[] accountPasswordHash;
 	private byte[] accountSalt;
+	
+	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime accountCreated;
+	
 	private Boolean accountActiveState;
 	
 	/**
@@ -38,6 +43,18 @@ public class Account implements Serializable{
 	
 	public Account(){}
 	
+	public Account(Integer accountId, String accountName, String accountEmail, byte[] accountPasswordHash,
+			byte[] accountSalt, LocalDateTime accountCreated) {
+		
+		this.accountId = accountId;
+		this.accountName = accountName;
+		this.accountEmail = accountEmail;
+		this.accountPasswordHash = accountPasswordHash;
+		this.accountSalt = accountSalt;
+		this.accountCreated = accountCreated;
+		this.accountActiveState = true;
+	}
+	
 	public Account(String accountName, String accountEmail, byte[] accountPasswordHash,
 			byte[] accountSalt, LocalDateTime accountCreated) {
 		
@@ -49,7 +66,8 @@ public class Account implements Serializable{
 		this.accountActiveState = true;
 	}
 	
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Integer getAccountId() {
 		return accountId;
 	}
@@ -103,7 +121,6 @@ public class Account implements Serializable{
 		this.accountActiveState = accountActiveState;
 	}
 
-	@Basic(optional = false)
 	public LocalDateTime getAccountCreated() {
 		return accountCreated;
 	}

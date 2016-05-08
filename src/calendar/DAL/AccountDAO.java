@@ -1,14 +1,15 @@
 package calendar.DAL;
 
-import java.sql.Timestamp;
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import calendar.model.Account;
@@ -16,15 +17,14 @@ import calendar.model.Account;
 @Transactional
 public class AccountDAO implements IAccountDAO {
 	
-	private SessionFactory sessionFactory;
+	@PersistenceUnit
+	EntityManagerFactory entityManagerFactory;
 	
-	public Session session(){
-		return sessionFactory.getCurrentSession();
-	}
+	public AccountDAO() {}
 	
-	public AccountDAO(SessionFactory sessionFactory)
+	public AccountDAO(EntityManagerFactory entityManagerFactory)
 	{
-		this.sessionFactory = sessionFactory;
+		this.entityManagerFactory = entityManagerFactory;
 	}
 	
 	/*
@@ -80,18 +80,28 @@ public class AccountDAO implements IAccountDAO {
 
 	@Override
 	public Account selectAccountById(int accountId) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		Account account = (Account) this.session().get(Account.class, accountId);
-		
-		return account;
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Account> query = builder.createQuery(Account.class);
+        Root<Account> root = query.from(Account.class);
+
+        return (Account) entityManager.createQuery(
+                query.select(root).where(builder.equal(root.get("accountId"), accountId))
+        ).getSingleResult();
 	}
 	
 	@Override
 	public Account selectAccountByName(String accountName) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		Account account = (Account) this.session().get(Account.class, accountName);
-		
-		return account;
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Account> query = builder.createQuery(Account.class);
+        Root<Account> root = query.from(Account.class);
+
+        return entityManager.createQuery(
+                query.select(root).where(builder.equal(root.get("accountName"), accountName))
+        ).getSingleResult();
 	}
 
 	@Override

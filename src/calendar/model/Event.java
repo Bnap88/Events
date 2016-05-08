@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Basic;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import calendar.converter.LocalDateTimeAttributeConverter;
 
 @Entity
 @Table(name = "Event")
@@ -22,6 +25,8 @@ public class Event implements Serializable {
 	private String eventStreetAddress;
 	private String eventCity;
 	private String eventState;
+	
+	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime eventTime;
 	
 	@Id
