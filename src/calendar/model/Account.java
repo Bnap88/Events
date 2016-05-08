@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +17,9 @@ public class Account implements Serializable{
 
     private static final long serialVersionUID = 1L;
     
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name="accountid")
 	private Integer accountId;
 	private String accountName;
 	private String accountEmail;
@@ -45,8 +49,7 @@ public class Account implements Serializable{
 		this.accountActiveState = true;
 	}
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
 	public Integer getAccountId() {
 		return accountId;
 	}
