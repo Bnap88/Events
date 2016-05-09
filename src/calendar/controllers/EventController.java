@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -25,22 +26,21 @@ import calendar.model.Account;
 import calendar.model.Attendance;
 import calendar.model.Event;
 import calendar.model.viewmodel.EventListing;
+import calendar.service.AccountService;
+import calendar.service.AttendanceService;
+import calendar.service.EventService;
 
 @Controller
 public class EventController {
 
-	private IAccountDAO accountDAO;
-	private IEventDAO eventDAO;
-	private IAttendanceDAO attendanceDAO;
+	@Inject AccountService accountService;
+	@Inject EventService eventService;
+	@Inject AttendanceService attendanceService;
 	
-	public EventController(IAccountDAO accountDAO, IEventDAO eventDAO, IAttendanceDAO attendanceDAO)
+	public EventController()
 	{
-		this.accountDAO = accountDAO;
-		this.eventDAO = eventDAO;
-		this.attendanceDAO = attendanceDAO;
-		
 		//Check to see if scaffolding has taken place
-		Account testAccount = accountDAO.selectAccountByName("andrew");
+		Account testAccount = accountService.selectAccountByName("andrew");
 				
 		if (testAccount == null)
 			scaffoldAccountsAndEvents();
@@ -62,9 +62,9 @@ public class EventController {
 		Account accountThree = new Account("chang", "chang@gmail.com", passwordHash, salt, dateTime);
 		
 		//Add Dummy Data
-		accountDAO.insertAccount(accountOne);
-		accountDAO.insertAccount(accountTwo);
-		accountDAO.insertAccount(accountThree);
+		accountService.insertAccount(accountOne);
+		accountService.insertAccount(accountTwo);
+		accountService.insertAccount(accountThree);
 		
 		//Create some dummy event data
 		Event eventOne = new Event(1, "Cowboy Hat Sale", "12345 Cactus Dr.", "Palm Springs", "CA", LocalDateTime.now());
@@ -72,9 +72,9 @@ public class EventController {
 		Event eventThree = new Event(2, "Pure Country Music Show", "854 Main Street", "Tombstone", "AZ", LocalDateTime.now().minusHours(2));
 		
 		//Add dummy event data
-		eventDAO.insertEvent(eventOne);
-		eventDAO.insertEvent(eventTwo);
-		eventDAO.insertEvent(eventThree);
+		eventService.insertEvent(eventOne);
+		eventService.insertEvent(eventTwo);
+		eventService.insertEvent(eventThree);
 	}
 	
 	@RequestMapping(value={"events", "", "/"}, method=RequestMethod.GET)
@@ -92,17 +92,17 @@ public class EventController {
 		deleteOldEvents();
 		
 		//Create our "view model"
-		List<Event> tempList = eventDAO.selectAllEvents(); 
+		List<Event> tempList = eventService.selectAllEvents(); 
 		
 		for (Event e : tempList)
 		{
 			EventListing eventListing = new EventListing();
 			eventListing.setEvent(e);
 			
-			Account temp = accountDAO.selectAccountById(e.getCreatorAccountId());
+			Account temp = accountService.selectAccountById(e.getCreatorAccountId());
 			eventListing.setAccountCreatorName(temp.getAccountName());
 
-			List<String> attendees = attendanceDAO.getAttendeeNamesViaEventId(e.getEventId());
+			List<String> attendees = attendanceService.getAttendeeNamesViaEventId(e.getEventId());
 			eventListing.setAttendees(attendees);
 			eventsWithAttendance.add(eventListing);	
 		}
@@ -117,11 +117,11 @@ public class EventController {
 	private void deleteOldEvents() {
 		LocalDateTime beforefourHours = LocalDateTime.now().minusHours(4);
 		
-		List<Event> events = eventDAO.selectAllEvents();
+		List<Event> events = eventService.selectAllEvents();
 		
 		for (Event event : events){
 			if(event.getEventTime().isBefore(beforefourHours)){
-					boolean result = eventDAO.deleteEvent(event.getEventId());
+					boolean result = eventService.deleteEvent(event.getEventId());
 			}
 		}
 	}
@@ -156,14 +156,14 @@ public class EventController {
 			String username = (String) session.getAttribute("username");
 			
 			//Get the user's accountId
-			Account tempAccount = accountDAO.selectAccountByName(username);
+			Account tempAccount = accountService.selectAccountByName(username);
 			int accountId = tempAccount.getAccountId();
 			
 			//Get all events created by the user
-			List<Event> createdEvents = eventDAO.selectEventsByCreatorId(accountId);
+			List<Event> createdEvents = eventService.selectEventsByCreatorId(accountId);
 			
 			//Get all events the user has "liked"
-			List<Event> likedEvents = attendanceDAO.selectCorrespondingLikedEventsByAccountId(accountId);
+			List<Event> likedEvents = attendanceService.selectCorrespondingLikedEventsByAccountId(accountId);
 			
 			if(createdEvents != null && createdEvents.size() != 0) 
 			{
@@ -241,13 +241,13 @@ public class EventController {
 		}
 		
 		else {	
-			Account userAccount = accountDAO.selectAccountByName(eventcreator);
+			Account userAccount = accountService.selectAccountByName(eventcreator);
 			int accountId = userAccount.getAccountId();
 			
 			//Create the new Event object and persist to data structure
 			Event event = new Event(accountId, eventname, eventaddress, eventcity, eventstate, eventDateTime);
 			
-			boolean eventInserted = eventDAO.insertEvent(event);
+			boolean eventInserted = eventService.insertEvent(event);
 			
 			if (eventInserted == true)
 				return "redirect:/events";
@@ -271,13 +271,13 @@ public class EventController {
 			Boolean duplicateAttendee = false;
 			
 			String username = (String) session.getAttribute("username");
-			Integer accountId = accountDAO.selectAccountByName(username).getAccountId();
+			Integer accountId = accountService.selectAccountByName(username).getAccountId();
 			
 			String trimmed = eventIdNumber.trim();
 			Integer eventId = Integer.parseInt(trimmed);
 			
 			//Check if event is already "liked" by the user
-			Attendance attendance = attendanceDAO.selectAttendanceByIds(accountId, eventId);
+			Attendance attendance = attendanceService.selectAttendanceByIds(accountId, eventId);
 			if (attendance != null)
 			{
 				duplicateAttendee = true;
@@ -288,7 +288,7 @@ public class EventController {
 			if (duplicateAttendee == false)
 			{
 				Attendance tempAttendance = new Attendance(accountId, eventId);
-				Boolean result = attendanceDAO.insertAttendance(tempAttendance);
+				Boolean result = attendanceService.insertAttendance(tempAttendance);
 				
 				//If Attendance addition failed, redirect to error page
 				if (result == false)

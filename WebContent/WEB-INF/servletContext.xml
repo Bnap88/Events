@@ -15,13 +15,9 @@
     </bean >
 
     <bean name="accountController" class="calendar.controllers.AccountController">
-        <constructor-arg ref="accountDAO" />
     </bean>
     
     <bean name="eventController" class="calendar.controllers.EventController">
-        <constructor-arg ref="accountDAO" />
-        <constructor-arg ref="eventDAO" />
-        <constructor-arg ref="attendanceDAO" />  
     </bean>
 
 </beans>

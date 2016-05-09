@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -22,16 +23,13 @@ import calendar.DAL.IAccountDAO;
 import calendar.helper.PasswordUtility;
 import calendar.model.Account;
 import calendar.model.formmodel.LogInFormObject;
+import calendar.service.AccountService;
 
 @Controller
 @RequestMapping("account")
 public class AccountController {
 	
-	private IAccountDAO accountDAO;
-	
-	public AccountController(IAccountDAO accountDAO) {
-		this.accountDAO = accountDAO;
-	}
+	@Inject AccountService accountService;
 	
 	@RequestMapping(value="login", method=RequestMethod.GET)
 	public String showLoginForm(HttpSession session, Model model) {
@@ -82,7 +80,7 @@ public class AccountController {
 			request.setAttribute("createFailed", true);
 		    return "register";
 		} 
-		else if (accountDAO.checkIfAccountNameExists(username)) 
+		else if (accountService.checkIfAccountNameExists(username)) 
 		{
 			request.setAttribute("duplicateName", true);  
 		    return "register";
@@ -134,9 +132,9 @@ public class AccountController {
 	private boolean authenticateCredentials(String username, String password) {
 		boolean authenticated = false;
 		
-		if (accountDAO.checkIfAccountNameExists(username))    		
+		if (accountService.checkIfAccountNameExists(username))    		
 		{	
-			Account account = accountDAO.selectAccountByName(username);
+			Account account = accountService.selectAccountByName(username);
 			
 			byte[] salt = account.getAccountSalt();
 			byte[] passwordDBHash = account.getAccountPasswordHash();
@@ -162,6 +160,6 @@ public class AccountController {
 		byte[] passwordHash = PasswordUtility.generatePasswordHash(salt, password);
 		
 		Account account = new Account(username, email, passwordHash, salt, dateTime);
-		accountDAO.insertAccount(account);
+		accountService.insertAccount(account);
 	}
 }
