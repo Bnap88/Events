@@ -8,53 +8,51 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import calendar.DAL.EventDAO;
+import calendar.DAL.IEventDAO;
 import calendar.model.Event;
 
 @Service("eventService")
 public class DefaultEventService implements EventService {
 
-	@Inject private EventDAO eventDAO;
+	@Inject private IEventDAO eventDAO;
 
 	@Override
 	@Transactional
 	public Boolean insertEvent(Event event) {
-		// TODO Auto-generated method stub
-		return null;
+		return eventDAO.insertEvent(event);
 	}
 
 	@Override
 	@Transactional
 	public Boolean updateEvent(Event event) {
-		// TODO Auto-generated method stub
-		return null;
+		return eventDAO.updateEvent(event);
 	}
 
 	@Override
 	@Transactional
 	public Boolean deleteEvent(int eventId) {
-		// TODO Auto-generated method stub
-		return null;
+		return eventDAO.deleteEvent(eventId);
 	}
 
 	@Override
 	@Transactional
 	public Event selectEventById(int eventId) {
-		// TODO Auto-generated method stub
-		return null;
+		return eventDAO.selectEventById(eventId);
 	}
 
 	@Override
 	@Transactional
 	public List<Event> selectEventsByCreatorId(int creatorId) {
-		// TODO Auto-generated method stub
-		return null;
+		return eventDAO.selectEventsByCreatorId(creatorId);
 	}
 
 	@Override
 	@Transactional
 	public List<Event> selectAllEvents() {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println("You are in the DefaultEventService selectAllEvents Method");
+		if (eventDAO == null)
+			System.out.println("The DefaultEventService eventDAO is null...");
+		return eventDAO.selectAllEvents();
 	}
 
 }

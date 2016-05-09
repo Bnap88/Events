@@ -16,6 +16,7 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>
 			/WEB-INF/rootContext.xml
+			/WEB-INF/dalContext.xml
 			/WEB-INF/serviceContext.xml
 			/WEB-INF/servletContext.xml
 		</param-value>

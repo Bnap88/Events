@@ -8,12 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import calendar.DAL.AccountDAO;
+import calendar.DAL.IAccountDAO;
 import calendar.model.Account;
 
-@Service("accountsService")
+@Service("accountService")
 public class DefaultAccountService implements AccountService {
 
-	@Inject private AccountDAO accountDAO;
+	@Inject private IAccountDAO accountDAO;
    
     @Override
     @Transactional
@@ -30,35 +31,30 @@ public class DefaultAccountService implements AccountService {
 	@Override
 	@Transactional
 	public Boolean insertAccount(Account account) {
-		// TODO Auto-generated method stub
-		return null;
+		return accountDAO.insertAccount(account);
 	}
 
 	@Override
 	@Transactional
 	public Boolean updateAccount(Account account) {
-		// TODO Auto-generated method stub
-		return null;
+		return accountDAO.updateAccount(account);
 	}
 
 	@Override
 	@Transactional
 	public Boolean deleteAccount(int accountId) {
-		// TODO Auto-generated method stub
-		return null;
+		return accountDAO.deleteAccount(accountId);
 	}
 
 	@Override
 	@Transactional
 	public List<Account> selectAllAccounts() {
-		// TODO Auto-generated method stub
-		return null;
+		return accountDAO.selectAllAccounts();
 	}
 
 	@Override
 	@Transactional
 	public Boolean checkIfAccountNameExists(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return accountDAO.checkIfAccountNameExists(name);
 	}	
 }

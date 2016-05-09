@@ -8,8 +8,11 @@
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
 		<config>WebContent/WEB-INF/serviceContext.xml</config>
+		<config>WebContent/WEB-INF/dalContext.xml</config>
 	</configs>
 	<autoconfigs>
+		<config>WebContent/WEB-INF/rootContext.xml</config>
+		<config>WebContent/WEB-INF/servletContext.xml</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

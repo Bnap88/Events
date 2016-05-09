@@ -2,7 +2,6 @@ package calendar.service;
 
 import java.util.List;
 
-import calendar.model.Account;
 import calendar.model.Attendance;
 import calendar.model.Event;
 
@@ -23,6 +22,4 @@ public interface AttendanceService {
 	public List<Attendance> selectAttendanceByAccountId(int accountId);
 	
 	public List<String> getAttendeeNamesViaEventId(int eventId);
-	
-	public List<Account> selectAllAccounts();
 }

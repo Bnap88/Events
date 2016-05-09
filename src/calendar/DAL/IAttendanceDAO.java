@@ -29,8 +29,5 @@ public interface IAttendanceDAO {
 	public List<Attendance> selectAttendanceByAccountId(int accountId);
 	
 	//Select all Attendee names via an EventId
-	public List<String> getAttendeeNamesViaEventId(int eventId);
-	
-	//Select all Attendances
-	public List<Account> selectAllAccounts();
+	public List<Account> getAttendeeNamesViaEventId(int eventId);
 }

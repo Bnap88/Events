@@ -40,10 +40,10 @@ public class EventController {
 	public EventController()
 	{
 		//Check to see if scaffolding has taken place
-		Account testAccount = accountService.selectAccountByName("andrew");
+		//Account testAccount = accountService.selectAccountByName("andrew");
 				
-		if (testAccount == null)
-			scaffoldAccountsAndEvents();
+		//if (testAccount == null)
+			//scaffoldAccountsAndEvents();
 	}
 	
 	private void scaffoldAccountsAndEvents()
@@ -121,7 +121,7 @@ public class EventController {
 		
 		for (Event event : events){
 			if(event.getEventTime().isBefore(beforefourHours)){
-					boolean result = eventService.deleteEvent(event.getEventId());
+					Boolean result = eventService.deleteEvent(event.getEventId());				
 			}
 		}
 	}

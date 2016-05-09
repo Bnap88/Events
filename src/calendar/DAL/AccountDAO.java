@@ -9,10 +9,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import calendar.model.Account;
 
+@Component("accountDAO")
 @Transactional
 public class AccountDAO implements IAccountDAO {
 	
@@ -72,8 +74,13 @@ public class AccountDAO implements IAccountDAO {
 
 	@Override
 	public List<Account> selectAllAccounts() {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Account> query = builder.createQuery(Account.class);
+        Root<Account> root = query.from(Account.class);
+
+        return (List<Account>) entityManager.createQuery(query.select(root)).getResultList();
 	}
 
 	@Override
