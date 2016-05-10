@@ -106,6 +106,7 @@ public class EventController {
 			Account temp = accountService.selectAccountById(e.getCreatorAccountId());
 			eventListing.setAccountCreatorName(temp.getAccountName());
 
+			System.out.println("line 109 called");
 			List<String> attendees = attendanceService.getAttendeeNamesViaEventId(e.getEventId());
 			eventListing.setAttendees(attendees);
 			eventsWithAttendance.add(eventListing);	

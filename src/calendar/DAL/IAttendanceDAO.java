@@ -22,12 +22,6 @@ public interface IAttendanceDAO {
 	//Select all Attendances by an EventId
 	public List<Attendance> selectAttendancesByEventId(int eventId);
 	
-	//Select corresponding Events a user has liked by a given accountId
-	public List<Event> selectCorrespondingLikedEventsByAccountId(int accountId);
-	
 	//Select all Attendances by an AccountId
-	public List<Attendance> selectAttendanceByAccountId(int accountId);
-	
-	//Select all Attendee names via an EventId
-	public List<Account> getAttendeeNamesViaEventId(int eventId);
+	public List<Attendance> selectAttendancesByAccountId(int accountId);
 }

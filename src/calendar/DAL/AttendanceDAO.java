@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -59,7 +60,8 @@ public class AttendanceDAO implements IAttendanceDAO {
 		entityManager.getTransaction().begin();
 		entityManager.createQuery("DELETE FROM Attendance a WHERE a.accountId = :accountId AND a.eventId = :eventId").
 			setParameter("accountId", accountId).
-			setParameter("eventId", eventId).executeUpdate();
+			setParameter("eventId", eventId).
+			executeUpdate();
 		entityManager.getTransaction().commit();
 		
 		return null;
@@ -67,45 +69,43 @@ public class AttendanceDAO implements IAttendanceDAO {
 
 	@Override
 	public Attendance selectAttendanceByIds(int accountId, int eventId) {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+		Query query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.accountId = :accountId AND p.eventId = :eventId").
+		setParameter("accountId", accountId).
+		setParameter("eventId", eventId);
+		
+		try {
+			Attendance attendance = (Attendance) query.getSingleResult();
+			return attendance;
+		}
+		catch (javax.persistence.NoResultException e)
+		{
+			return null;
+		}
 	}
 
 	@Override
 	public List<Attendance> selectAttendancesByEventId(int eventId) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Attendance> query = builder.createQuery(Attendance.class);
-        Root<Attendance> root = query.from(Attendance.class);
-
-        return (List<Attendance>) entityManager.createQuery(
-                query.select(root).where(builder.equal(root.get("eventId"), eventId))
-        ).getResultList();  
+		Query query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.eventId = :eventId");
+		query.setParameter("eventId",eventId);
+		
+		//TODO
+		List<Attendance> attendances = query.getResultList();
+		return attendances;
 	}
 
 	@Override
-	public List<Event> selectCorrespondingLikedEventsByAccountId(int accountId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Attendance> selectAttendanceByAccountId(int accountId) {
+	public List<Attendance> selectAttendancesByAccountId(int accountId) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Attendance> query = builder.createQuery(Attendance.class);
-        Root<Attendance> root = query.from(Attendance.class);
-
-        return (List<Attendance>) entityManager.createQuery(
-                query.select(root).where(builder.equal(root.get("accountId"), accountId))
-        ).getResultList();
-	}
-
-	@Override
-	public List<Account> getAttendeeNamesViaEventId(int eventId) {
-		// TODO Auto-generated method stub
-		return null;
+		Query query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.accountId = :accountId");
+		query.setParameter("accountId",accountId);
+		
+		//TODO
+		List<Attendance> attendances = query.getResultList();
+		return attendances;
 	}
 }

@@ -8,7 +8,9 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import calendar.DAL.IAccountDAO;
 import calendar.DAL.IAttendanceDAO;
+import calendar.DAL.IEventDAO;
 import calendar.model.Account;
 import calendar.model.Attendance;
 import calendar.model.Event;
@@ -17,6 +19,8 @@ import calendar.model.Event;
 public class DefaultAttendanceService implements AttendanceService {
 	
 	@Inject private IAttendanceDAO attendanceDAO;
+	@Inject private AccountService accountService;
+	@Inject private EventService eventService;
 
 	@Override
 	@Transactional
@@ -51,26 +55,41 @@ public class DefaultAttendanceService implements AttendanceService {
 	@Override
 	@Transactional
 	public List<Event> selectCorrespondingLikedEventsByAccountId(int accountId) {
-		return attendanceDAO.selectCorrespondingLikedEventsByAccountId(accountId);
+		
+		List<Attendance> attendances = attendanceDAO.selectAttendancesByAccountId(accountId);
+		List<Event> eventList = new ArrayList<Event>();
+		
+		for (Attendance attendance : attendances)
+		{
+			Event event = eventService.selectEventById(attendance.getEventId());
+			eventList.add(event);
+		}
+		
+		return eventList;
 	}
 
 	@Override
 	@Transactional
 	public List<Attendance> selectAttendanceByAccountId(int accountId) {
-		return attendanceDAO.selectAttendanceByAccountId(accountId);
+		return attendanceDAO.selectAttendancesByAccountId(accountId);
 	}
 
 	@Override
 	@Transactional
 	public List<String> getAttendeeNamesViaEventId(int eventId) {
-		List<Account> tempList = attendanceDAO.getAttendeeNamesViaEventId(eventId);
+		System.out.println("line 80 reached");
+		List<Attendance> attendance = attendanceDAO.selectAttendancesByEventId(eventId);
+		System.out.println("line 82 reached");
 		List<String> nameList = new ArrayList<String>();
 		
-		for (Account account : tempList)
+		for (Attendance a : attendance)
 		{
+			Account account = accountService.selectAccountById(a.getAccountId());
+			System.out.println("line 88 reached");
 			nameList.add(account.getAccountName());
 		}
 		
 		return nameList;
+
 	}
 }

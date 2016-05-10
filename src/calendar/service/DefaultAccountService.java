@@ -24,7 +24,6 @@ public class DefaultAccountService implements AccountService {
     @Override
     @Transactional
     public Account selectAccountByName(String name) {
-    	System.out.println("line 27 in DefaultAccountService reached");
         return accountDAO.selectAccountByName(name);
     }
 
