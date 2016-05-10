@@ -15,12 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import calendar.DAL.AccountDAO;
-import calendar.DAL.AttendanceDAO;
-import calendar.DAL.EventDAO;
-import calendar.DAL.IAccountDAO;
-import calendar.DAL.IAttendanceDAO;
-import calendar.DAL.IEventDAO;
 import calendar.helper.PasswordUtility;
 import calendar.model.Account;
 import calendar.model.Attendance;
@@ -40,10 +34,10 @@ public class EventController {
 	public EventController()
 	{
 		//Check to see if scaffolding has taken place
-		//Account testAccount = accountService.selectAccountByName("andrew");
+		Account testAccount = accountService.selectAccountByName("andrew");
 				
-		//if (testAccount == null)
-			//scaffoldAccountsAndEvents();
+		if (testAccount == null)
+			scaffoldAccountsAndEvents();
 	}
 	
 	private void scaffoldAccountsAndEvents()

@@ -56,36 +56,60 @@ public class AccountDAO implements IAccountDAO {
 
 	@Override
 	public Boolean insertAccount(Account account) {
-		// TODO Auto-generated method stub
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+		entityManager.persist(account);
 		return null;
 	}
 
 	@Override
 	public Boolean updateAccount(Account account) {
-		// TODO Auto-generated method stub
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+		entityManager.getTransaction().begin();
+		entityManager.merge(account);
+		entityManager.getTransaction().commit();
+		
 		return null;
 	}
 
 	@Override
 	public Boolean deleteAccount(int accountId) {
-		// TODO Auto-generated method stub
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+		entityManager.getTransaction().begin();
+		entityManager.createQuery("DELETE FROM Account a WHERE a.accountId = :accountId").setParameter("accountId", accountId).executeUpdate();
+		entityManager.getTransaction().commit();
+		
 		return null;
 	}
 
 	@Override
 	public List<Account> selectAllAccounts() {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();	
+	    
+		CriteriaQuery<Account> criteria = entityManager.getCriteriaBuilder().createQuery(Account.class);
+	    criteria.select(criteria.from(Account.class));
+	    List<Account> ListOfAccounts = entityManager.createQuery(criteria).getResultList();
+	    
+	    return ListOfAccounts;
+	}
+
+	@Override
+	public Boolean checkIfAccountNameExists(String name) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> query = builder.createQuery(Account.class);
         Root<Account> root = query.from(Account.class);
 
-        return (List<Account>) entityManager.createQuery(query.select(root)).getResultList();
-	}
-
-	@Override
-	public Boolean checkIfAccountNameExists(String name) {
-		// TODO Auto-generated method stub
-		return null;
+        Account result = entityManager.createQuery(
+                query.select(root).where(builder.equal(root.get("accountName"), name))
+        ).getSingleResult();
+        
+        if (result == null)
+        	return false;
+        else
+        	return true;
 	}
 }

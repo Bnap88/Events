@@ -7,6 +7,8 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd 
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
+	<context:annotation-config></context:annotation-config>
+
 	<!-- Apache Commons DJBC2 DataSource -->
 	<bean id="dataSource" destroy-method="close"
 		class="org.apache.commons.dbcp2.BasicDataSource">
@@ -36,9 +38,8 @@
    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
       <property name="entityManagerFactory" ref="entityManagerFactory" />
    </bean>
-   <tx:annotation-driven />
- 
-	 <context:component-scan base-package="calendar.DAL, calendar.converter"/> 	
+   
+	<context:component-scan base-package="calendar.DAL, calendar.converter"/> 	
 	
 			<!-- DAO objects -->
 	<bean name="accountDAO" class="calendar.DAL.AccountDAO">
@@ -47,5 +48,7 @@
 	</bean>
 	<bean name="eventDAO" class="calendar.DAL.EventDAO">
 	</bean>
+	
+	<tx:annotation-driven />
 
 </beans>

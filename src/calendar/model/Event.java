@@ -106,7 +106,6 @@ public class Event implements Serializable {
 	}
 	
 	public int compareTo(Event o) {
-		// TODO Auto-generated method stub
 		return this.getEventTime().compareTo(o.getEventTime());
 	}
 

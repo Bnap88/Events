@@ -30,19 +30,34 @@ public class EventDAO implements IEventDAO {
 
 	@Override
 	public Boolean insertEvent(Event event) {
-		// TODO Auto-generated method stub
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+		entityManager.getTransaction().begin();
+		entityManager.persist(event);
+		entityManager.getTransaction().commit();
+		
 		return null;
 	}
 
 	@Override
 	public Boolean updateEvent(Event event) {
-		// TODO Auto-generated method stub
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+		entityManager.getTransaction().begin();
+		entityManager.merge(event);
+		entityManager.getTransaction().commit();
+		
 		return null;
 	}
 
 	@Override
 	public Boolean deleteEvent(int eventId) {
-		// TODO Auto-generated method stub
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+		entityManager.getTransaction().begin();
+		entityManager.createQuery("DELETE FROM Event a WHERE a.eventId = :eventId").setParameter("eventId", eventId).executeUpdate();
+		entityManager.getTransaction().commit();
+		
 		return null;
 	}
 

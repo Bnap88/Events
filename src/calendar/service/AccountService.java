@@ -2,7 +2,6 @@ package calendar.service;
 
 import java.util.List;
 
-import calendar.DAL.AccountDAO;
 import calendar.model.Account;
 
 public interface AccountService {

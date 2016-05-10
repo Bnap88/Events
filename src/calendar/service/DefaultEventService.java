@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import calendar.DAL.EventDAO;
 import calendar.DAL.IEventDAO;
 import calendar.model.Event;
 
@@ -49,9 +48,6 @@ public class DefaultEventService implements EventService {
 	@Override
 	@Transactional
 	public List<Event> selectAllEvents() {
-		System.out.println("You are in the DefaultEventService selectAllEvents Method");
-		if (eventDAO == null)
-			System.out.println("The DefaultEventService eventDAO is null...");
 		return eventDAO.selectAllEvents();
 	}
 

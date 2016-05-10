@@ -32,19 +32,36 @@ public class AttendanceDAO implements IAttendanceDAO {
 
 	@Override
 	public Boolean insertAttendance(Attendance attendance) {
-		// TODO Auto-generated method stub
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+		entityManager.getTransaction().begin();
+		entityManager.persist(attendance);
+		entityManager.getTransaction().commit();
+		
 		return null;
 	}
 
 	@Override
 	public Boolean updateAttendance(Attendance attendance) {
-		// TODO Auto-generated method stub
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+		entityManager.getTransaction().begin();
+		entityManager.merge(attendance);
+		entityManager.getTransaction().commit();
+		
 		return null;
 	}
 
 	@Override
 	public Boolean deleteAttendance(int accountId, int eventId) {
-		// TODO Auto-generated method stub
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+		entityManager.getTransaction().begin();
+		entityManager.createQuery("DELETE FROM Attendance a WHERE a.accountId = :accountId AND a.eventId = :eventId").
+			setParameter("accountId", accountId).
+			setParameter("eventId", eventId).executeUpdate();
+		entityManager.getTransaction().commit();
+		
 		return null;
 	}
 
