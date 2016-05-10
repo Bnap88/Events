@@ -39,7 +39,7 @@
       <property name="entityManagerFactory" ref="entityManagerFactory" />
    </bean>
    
-	<context:component-scan base-package="calendar.DAL, calendar.converter"/> 	
+	<context:component-scan base-package="calendar.DAL, calendar.converter, calendar.controllers"/> 	
 	
 			<!-- DAO objects -->
 	<bean name="accountDAO" class="calendar.DAL.AccountDAO">

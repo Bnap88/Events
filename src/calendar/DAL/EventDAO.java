@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -65,26 +66,30 @@ public class EventDAO implements IEventDAO {
 	public Event selectEventById(int eventId) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Event> query = builder.createQuery(Event.class);
-        Root<Event> root = query.from(Event.class);
-
-        return (Event) entityManager.createQuery(
-                query.select(root).where(builder.equal(root.get("eventId"), eventId))
-        ).getSingleResult();
+		Query query =  entityManager.createQuery("SELECT p FROM Event p WHERE p.eventId = :eventId");
+		query.setParameter("eventId", eventId);
+		
+		try {
+			Event event = (Event) query.getSingleResult();
+			return event;
+		}
+		catch (javax.persistence.NoResultException e)
+		{
+			return null;
+		}
 	}
 
 	@Override
 	public List<Event> selectEventsByCreatorId(int creatorId) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Event> query = builder.createQuery(Event.class);
-        Root<Event> root = query.from(Event.class);
+		Query query =  entityManager.createQuery("SELECT p FROM Event p WHERE p.creatorId = :creatorId");
+		query.setParameter("creatorId", creatorId);
+		
+		//TODO
+		List<Event> events = query.getResultList();
+		return events;
 
-        return (List<Event>) entityManager.createQuery(
-                query.select(root).where(builder.equal(root.get("creatorId"), creatorId))
-        ).getResultList();
 	}
 
 	@Override
@@ -93,8 +98,10 @@ public class EventDAO implements IEventDAO {
 	    
 		CriteriaQuery<Event> criteria = entityManager.getCriteriaBuilder().createQuery(Event.class);
 	    criteria.select(criteria.from(Event.class));
+	    
 	    List<Event> ListOfEvents = entityManager.createQuery(criteria).getResultList();
 	    
 	    return ListOfEvents;
+	    
 	}
 }

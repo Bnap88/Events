@@ -27,13 +27,20 @@ import calendar.service.EventService;
 @Controller
 public class EventController {
 
-	@Inject AccountService accountService;
-	@Inject EventService eventService;
-	@Inject AttendanceService attendanceService;
+	AccountService accountService;
+	EventService eventService;
+	AttendanceService attendanceService;
 	
-	public EventController()
+	@Inject
+	public EventController(AccountService accountService, EventService eventService, AttendanceService attendanceService )
 	{
+		//Set Dependencies
+		this.accountService = accountService;
+		this.eventService = eventService;
+		this.attendanceService = attendanceService;
+		
 		//Check to see if scaffolding has taken place
+		
 		Account testAccount = accountService.selectAccountByName("andrew");
 				
 		if (testAccount == null)
@@ -69,6 +76,8 @@ public class EventController {
 		eventService.insertEvent(eventOne);
 		eventService.insertEvent(eventTwo);
 		eventService.insertEvent(eventThree);
+		
+		System.out.println("line 80 of Event Controller reached - controller constructor finished");
 	}
 	
 	@RequestMapping(value={"events", "", "/"}, method=RequestMethod.GET)
@@ -83,6 +92,7 @@ public class EventController {
 			request.setAttribute("loggedIn", true);
 		}
 		
+		System.out.println("line 95 called - we are in the first initial page request, before delete old events");
 		deleteOldEvents();
 		
 		//Create our "view model"

@@ -81,7 +81,7 @@ public class AttendanceDAO implements IAttendanceDAO {
 
         return (List<Attendance>) entityManager.createQuery(
                 query.select(root).where(builder.equal(root.get("eventId"), eventId))
-        ).getResultList();
+        ).getResultList();  
 	}
 
 	@Override
