@@ -23,9 +23,10 @@ CREATE TABLE Event
 
 CREATE TABLE Attendance
 (
+  attendanceId INT,
   accountId INT,
   eventId INT,
-  CONSTRAINT PK_Attendance PRIMARY KEY (accountId, eventId),
+  CONSTRAINT PK_Attendance PRIMARY KEY (attendanceId),
   CONSTRAINT FK_Attendance_Account FOREIGN KEY (accountId) REFERENCES Account (accountId) ON DELETE CASCADE,
   CONSTRAINT FK_Attendance_Event FOREIGN KEY (eventId) REFERENCES Event (eventId) ON DELETE CASCADE
 )

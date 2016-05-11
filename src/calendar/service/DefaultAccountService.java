@@ -30,6 +30,7 @@ public class DefaultAccountService implements AccountService {
 	@Override
 	@Transactional
 	public Boolean insertAccount(Account account) {
+		System.out.println("*****Account Service Insert Account Called");
 		return accountDAO.insertAccount(account);
 	}
 

@@ -42,7 +42,7 @@ public class EventController {
 		//Check to see if scaffolding has taken place
 		
 		Account testAccount = accountService.selectAccountByName("andrew");
-				
+			
 		if (testAccount == null)
 			scaffoldAccountsAndEvents();
 	}
@@ -68,7 +68,7 @@ public class EventController {
 		accountService.insertAccount(accountThree);
 		
 		//Create some dummy event data
-		Event eventOne = new Event(1, "Cowboy Hat Sale", "12345 Cactus Dr.", "Palm Springs", "CA", LocalDateTime.now());
+		Event eventOne = new Event(0, "Cowboy Hat Sale", "12345 Cactus Dr.", "Palm Springs", "CA", LocalDateTime.now());
 		Event eventTwo = new Event( 1, "Whiskey Tasting", "666 Canyon Ave.", "Dallas", "TX", LocalDateTime.now().minusHours(1));
 		Event eventThree = new Event(2, "Pure Country Music Show", "854 Main Street", "Tombstone", "AZ", LocalDateTime.now().minusHours(2));
 		
@@ -98,21 +98,29 @@ public class EventController {
 		//Create our "view model"
 		List<Event> tempList = eventService.selectAllEvents(); 
 		
+		System.out.println("tempList size is " + tempList.size());
+		
 		for (Event e : tempList)
 		{
+			System.out.println("**********Event Controller Line 105 - Loop Begin");
 			EventListing eventListing = new EventListing();
 			eventListing.setEvent(e);
 			
+			System.out.println("**********Event Controller Line 109 SelectAccountById : Begin");
 			Account temp = accountService.selectAccountById(e.getCreatorAccountId());
+			System.out.println("**********Event Controller Line 111 SelectAccountById : End");
 			eventListing.setAccountCreatorName(temp.getAccountName());
-
-			System.out.println("line 109 called");
+			System.out.println("++++++++++++++++ Line 113 EventId is: " + e.getEventId());
+			System.out.println("**********Event Controller Line 114 Get attendee names via event id : Begin");
 			List<String> attendees = attendanceService.getAttendeeNamesViaEventId(e.getEventId());
+			System.out.println("**********Event Controller Line 116 Get attendee names via event id : End");
 			eventListing.setAttendees(attendees);
 			eventsWithAttendance.add(eventListing);	
+			System.out.println("**********Event Controller Line 119 - Loop End");
 		}
 		//End Create
 		
+		System.out.println("Line 116 called in EventController");
 		request.setAttribute("eventsList", eventsWithAttendance);
 		
         return "event/eventslist";

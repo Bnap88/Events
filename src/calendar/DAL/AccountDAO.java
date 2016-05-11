@@ -17,11 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import calendar.model.Account;
 
 @Component("accountDAO")
-@Transactional
 public class AccountDAO implements IAccountDAO {
 	
 	@PersistenceUnit
-	EntityManagerFactory entityManagerFactory;
+	EntityManagerFactory entityManager;
 	
 	public AccountDAO() {}
 	
@@ -68,9 +67,8 @@ public class AccountDAO implements IAccountDAO {
 	public Boolean insertAccount(Account account) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.getTransaction().begin();
+		System.out.println("AccountDAO InsertAccount called");
 		entityManager.persist(account);
-		entityManager.getTransaction().commit();
 		
 		return null;
 	}
@@ -79,9 +77,7 @@ public class AccountDAO implements IAccountDAO {
 	public Boolean updateAccount(Account account) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.getTransaction().begin();
 		entityManager.merge(account);
-		entityManager.getTransaction().commit();
 		
 		return null;
 	}
@@ -90,9 +86,7 @@ public class AccountDAO implements IAccountDAO {
 	public Boolean deleteAccount(int accountId) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.getTransaction().begin();
 		entityManager.createQuery("DELETE FROM Account a WHERE a.accountId = :accountId").setParameter("accountId", accountId).executeUpdate();
-		entityManager.getTransaction().commit();
 		
 		return null;
 	}

@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component("eventDAO")
-@Transactional
 public class EventDAO implements IEventDAO {
 	
 	@PersistenceUnit
@@ -34,9 +33,7 @@ public class EventDAO implements IEventDAO {
 	public Boolean insertEvent(Event event) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.getTransaction().begin();
 		entityManager.persist(event);
-		entityManager.getTransaction().commit();
 		
 		return null;
 	}
@@ -45,9 +42,7 @@ public class EventDAO implements IEventDAO {
 	public Boolean updateEvent(Event event) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.getTransaction().begin();
 		entityManager.merge(event);
-		entityManager.getTransaction().commit();
 		
 		return null;
 	}
@@ -56,9 +51,7 @@ public class EventDAO implements IEventDAO {
 	public Boolean deleteEvent(int eventId) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.getTransaction().begin();
 		entityManager.createQuery("DELETE FROM Event a WHERE a.eventId = :eventId").setParameter("eventId", eventId).executeUpdate();
-		entityManager.getTransaction().commit();
 		
 		return null;
 	}

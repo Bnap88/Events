@@ -19,7 +19,6 @@ import calendar.model.Attendance;
 import calendar.model.Event;
 
 @Component("attendanceDAO")
-@Transactional
 public class AttendanceDAO implements IAttendanceDAO {
 	
 	@PersistenceUnit
@@ -36,9 +35,7 @@ public class AttendanceDAO implements IAttendanceDAO {
 	public Boolean insertAttendance(Attendance attendance) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.getTransaction().begin();
 		entityManager.persist(attendance);
-		entityManager.getTransaction().commit();
 		
 		return null;
 	}
@@ -47,9 +44,7 @@ public class AttendanceDAO implements IAttendanceDAO {
 	public Boolean updateAttendance(Attendance attendance) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.getTransaction().begin();
 		entityManager.merge(attendance);
-		entityManager.getTransaction().commit();
 		
 		return null;
 	}
@@ -58,12 +53,10 @@ public class AttendanceDAO implements IAttendanceDAO {
 	public Boolean deleteAttendance(int accountId, int eventId) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.getTransaction().begin();
 		entityManager.createQuery("DELETE FROM Attendance a WHERE a.accountId = :accountId AND a.eventId = :eventId", Attendance.class).
 			setParameter("accountId", accountId).
 			setParameter("eventId", eventId).
 			executeUpdate();
-		entityManager.getTransaction().commit();
 		
 		return null;
 	}
@@ -93,14 +86,13 @@ public class AttendanceDAO implements IAttendanceDAO {
 		TypedQuery<Attendance> query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.eventId = :eventId", Attendance.class);
 		query.setParameter("eventId",eventId);
 		
-		//TODO
-		try {
-			List<Attendance> attendances = query.getResultList();
-			return attendances;
-		} catch (org.hibernate.exception.SQLGrammarException e)
-		{
-			return null;
-		}
+		System.out.println("||||||| Line 96 CALLED in AttendanceDAO - Begin");
+		//query.setHint("javax.persistence.query.timeout", 2000);
+		List<Attendance> attendances = query.getResultList();
+		System.out.println("||||||| Line 99 CALLED in AttendanceDAO - end");
+
+		return attendances;
+		
 	}
 
 	@Override
