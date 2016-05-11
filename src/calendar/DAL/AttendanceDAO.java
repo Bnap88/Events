@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -21,49 +22,51 @@ import calendar.model.Event;
 @Component("attendanceDAO")
 public class AttendanceDAO implements IAttendanceDAO {
 	
-	@PersistenceUnit
-	EntityManagerFactory entityManagerFactory;
+	@PersistenceContext
+	EntityManager entityManager;
 	
 	public AttendanceDAO() {}
-	
-	public AttendanceDAO(EntityManagerFactory entityManagerFactory)
-	{
-		this.entityManagerFactory = entityManagerFactory;
-	}
 
 	@Override
 	public Boolean insertAttendance(Attendance attendance) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
+		try {
 		entityManager.persist(attendance);
-		
-		return null;
+		return true;
+		} catch (Exception e)
+		{
+			return false;
+		}
 	}
 
 	@Override
 	public Boolean updateAttendance(Attendance attendance) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
+		try {
 		entityManager.merge(attendance);
-		
-		return null;
+		return true;
+		} catch (Exception e)
+		{
+			return false;
+		}
 	}
 
 	@Override
 	public Boolean deleteAttendance(int accountId, int eventId) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.createQuery("DELETE FROM Attendance a WHERE a.accountId = :accountId AND a.eventId = :eventId", Attendance.class).
+		Integer result = entityManager.createQuery("DELETE FROM Attendance a WHERE a.accountId = :accountId AND a.eventId = :eventId", Attendance.class).
 			setParameter("accountId", accountId).
 			setParameter("eventId", eventId).
 			executeUpdate();
 		
-		return null;
+		if (result == 1)
+			return true;
+		else
+			return false;
 	}
 
 	@Override
 	public Attendance selectAttendanceByIds(int accountId, int eventId) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
 		Query query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.accountId = :accountId AND p.eventId = :eventId", Attendance.class).
 		setParameter("accountId", accountId).
@@ -81,7 +84,6 @@ public class AttendanceDAO implements IAttendanceDAO {
 
 	@Override
 	public List<Attendance> selectAttendancesByEventId(int eventId) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
 		TypedQuery<Attendance> query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.eventId = :eventId", Attendance.class);
 		query.setParameter("eventId",eventId);
@@ -97,7 +99,6 @@ public class AttendanceDAO implements IAttendanceDAO {
 
 	@Override
 	public List<Attendance> selectAttendancesByAccountId(int accountId) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
 		TypedQuery<Attendance> query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.accountId = :accountId", Attendance.class);
 		query.setParameter("accountId",accountId);

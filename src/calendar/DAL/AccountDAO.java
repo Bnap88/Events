@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -19,19 +20,13 @@ import calendar.model.Account;
 @Component("accountDAO")
 public class AccountDAO implements IAccountDAO {
 	
-	@PersistenceUnit
-	EntityManagerFactory entityManager;
+	@PersistenceContext
+	EntityManager entityManager;
 	
 	public AccountDAO() {}
-	
-	public AccountDAO(EntityManagerFactory entityManagerFactory)
-	{
-		this.entityManagerFactory = entityManagerFactory;
-	}
 
 	@Override
 	public Account selectAccountById(int accountId) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
 		Query query =  entityManager.createQuery("SELECT p FROM Account p WHERE p.accountId = :accountId");
 		query.setParameter("accountId", accountId);
@@ -48,7 +43,6 @@ public class AccountDAO implements IAccountDAO {
 	
 	@Override
 	public Account selectAccountByName(String accountName) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
 		Query query =  entityManager.createQuery("SELECT p FROM Account p WHERE p.accountName = :accountName");
 		query.setParameter("accountName", accountName);
@@ -65,35 +59,41 @@ public class AccountDAO implements IAccountDAO {
 
 	@Override
 	public Boolean insertAccount(Account account) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		System.out.println("AccountDAO InsertAccount called");
-		entityManager.persist(account);
-		
-		return null;
+		try {
+			entityManager.persist(account);
+			return true;
+		} catch (Exception e)
+		{
+			return false;
+		}
 	}
 
 	@Override
 	public Boolean updateAccount(Account account) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.merge(account);
-		
-		return null;
+		try {
+			entityManager.merge(account);
+			return true;
+		} catch (Exception e)
+		{
+			return false;
+		}
 	}
 
 	@Override
 	public Boolean deleteAccount(int accountId) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.createQuery("DELETE FROM Account a WHERE a.accountId = :accountId").setParameter("accountId", accountId).executeUpdate();
+		int result = entityManager.createQuery("DELETE FROM Account a WHERE a.accountId = :accountId").setParameter("accountId", accountId).executeUpdate();
 		
-		return null;
+		if (result == 1)
+			return true;
+		else
+			return false;
 	}
 
 	@Override
 	public List<Account> selectAllAccounts() {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();	
 	    
 		CriteriaQuery<Account> criteria = entityManager.getCriteriaBuilder().createQuery(Account.class);
 	    criteria.select(criteria.from(Account.class));
@@ -104,7 +104,6 @@ public class AccountDAO implements IAccountDAO {
 
 	@Override
 	public Boolean checkIfAccountNameExists(String name) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Account> query = builder.createQuery(Account.class);

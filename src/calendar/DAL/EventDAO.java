@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -19,46 +20,48 @@ import org.springframework.transaction.annotation.Transactional;
 @Component("eventDAO")
 public class EventDAO implements IEventDAO {
 	
-	@PersistenceUnit
-	EntityManagerFactory entityManagerFactory;
+	@PersistenceContext
+	EntityManager entityManager;
 	
 	public EventDAO() {}
-	
-	public EventDAO(EntityManagerFactory entityManagerFactory)
-	{
-		this.entityManagerFactory = entityManagerFactory;
-	}
 
 	@Override
 	public Boolean insertEvent(Event event) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.persist(event);
-		
-		return null;
+		try {
+			entityManager.persist(event);
+			return true;
+		} catch (Exception e)
+		{
+			return false;
+		}
 	}
 
 	@Override
 	public Boolean updateEvent(Event event) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.merge(event);
-		
-		return null;
+		try {
+			entityManager.merge(event);
+			return null;
+		} catch (Exception e)
+		{
+			return false;
+		}
 	}
 
 	@Override
 	public Boolean deleteEvent(int eventId) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		entityManager.createQuery("DELETE FROM Event a WHERE a.eventId = :eventId").setParameter("eventId", eventId).executeUpdate();
+		int result = entityManager.createQuery("DELETE FROM Event a WHERE a.eventId = :eventId").setParameter("eventId", eventId).executeUpdate();
 		
-		return null;
+		if (result == 1)
+			return true;
+		else
+			return false;
 	}
 
 	@Override
 	public Event selectEventById(int eventId) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
 		Query query =  entityManager.createQuery("SELECT p FROM Event p WHERE p.eventId = :eventId", Event.class);
 		query.setParameter("eventId", eventId);
@@ -75,10 +78,9 @@ public class EventDAO implements IEventDAO {
 
 	@Override
 	public List<Event> selectEventsByCreatorId(int creatorId) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		TypedQuery<Event> query =  entityManager.createQuery("SELECT p FROM Event p WHERE p.creatorId = :creatorId", Event.class);
-		query.setParameter("creatorId", creatorId);
+		TypedQuery<Event> query =  entityManager.createQuery("SELECT p FROM Event p WHERE p.creatorAccountId = :creatorAccountId", Event.class);
+		query.setParameter("creatorAccountId", creatorId);
 		
 		//TODO
 		List<Event> events = query.getResultList();
@@ -88,7 +90,6 @@ public class EventDAO implements IEventDAO {
 
 	@Override
 	public List<Event> selectAllEvents() {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();	
 	    
 		CriteriaQuery<Event> criteria = entityManager.getCriteriaBuilder().createQuery(Event.class);
 	    criteria.select(criteria.from(Event.class));
