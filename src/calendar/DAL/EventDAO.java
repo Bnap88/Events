@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -66,7 +67,7 @@ public class EventDAO implements IEventDAO {
 	public Event selectEventById(int eventId) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		Query query =  entityManager.createQuery("SELECT p FROM Event p WHERE p.eventId = :eventId");
+		Query query =  entityManager.createQuery("SELECT p FROM Event p WHERE p.eventId = :eventId", Event.class);
 		query.setParameter("eventId", eventId);
 		
 		try {
@@ -83,7 +84,7 @@ public class EventDAO implements IEventDAO {
 	public List<Event> selectEventsByCreatorId(int creatorId) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		Query query =  entityManager.createQuery("SELECT p FROM Event p WHERE p.creatorId = :creatorId");
+		TypedQuery<Event> query =  entityManager.createQuery("SELECT p FROM Event p WHERE p.creatorId = :creatorId", Event.class);
 		query.setParameter("creatorId", creatorId);
 		
 		//TODO

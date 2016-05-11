@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -58,7 +59,7 @@ public class AttendanceDAO implements IAttendanceDAO {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
 		entityManager.getTransaction().begin();
-		entityManager.createQuery("DELETE FROM Attendance a WHERE a.accountId = :accountId AND a.eventId = :eventId").
+		entityManager.createQuery("DELETE FROM Attendance a WHERE a.accountId = :accountId AND a.eventId = :eventId", Attendance.class).
 			setParameter("accountId", accountId).
 			setParameter("eventId", eventId).
 			executeUpdate();
@@ -71,7 +72,7 @@ public class AttendanceDAO implements IAttendanceDAO {
 	public Attendance selectAttendanceByIds(int accountId, int eventId) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		Query query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.accountId = :accountId AND p.eventId = :eventId").
+		Query query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.accountId = :accountId AND p.eventId = :eventId", Attendance.class).
 		setParameter("accountId", accountId).
 		setParameter("eventId", eventId);
 		
@@ -89,23 +90,33 @@ public class AttendanceDAO implements IAttendanceDAO {
 	public List<Attendance> selectAttendancesByEventId(int eventId) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		Query query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.eventId = :eventId");
+		TypedQuery<Attendance> query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.eventId = :eventId", Attendance.class);
 		query.setParameter("eventId",eventId);
 		
 		//TODO
-		List<Attendance> attendances = query.getResultList();
-		return attendances;
+		try {
+			List<Attendance> attendances = query.getResultList();
+			return attendances;
+		} catch (org.hibernate.exception.SQLGrammarException e)
+		{
+			return null;
+		}
 	}
 
 	@Override
 	public List<Attendance> selectAttendancesByAccountId(int accountId) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
-		Query query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.accountId = :accountId");
+		TypedQuery<Attendance> query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.accountId = :accountId", Attendance.class);
 		query.setParameter("accountId",accountId);
 		
 		//TODO
-		List<Attendance> attendances = query.getResultList();
-		return attendances;
+		try {
+			List<Attendance> attendances = query.getResultList();
+			return attendances;
+		} catch (org.hibernate.exception.SQLGrammarException e)
+		{
+			return null;
+		}
 	}
 }
