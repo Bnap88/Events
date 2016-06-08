@@ -31,7 +31,7 @@ if (session.getAttribute("username") != null)
         <div id="navbarCollapse" class="collapse navbar-collapse">
          <% if (loggedIn == true) { %>
             <ul class="nav navbar-nav">
-                <li><a href="<c:url value='/events/accountevents'></c:url>"">My Account</a></li>
+                <li><a href="<c:url value='/events/accountevents'></c:url>">My Account</a></li>
                 <li><a href="<c:url value='/events/create'></c:url>">Create Event</a></li>
             </ul> <% } %>
             <ul class="nav navbar-nav navbar-right">

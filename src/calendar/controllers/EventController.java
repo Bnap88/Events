@@ -132,7 +132,7 @@ public class EventController {
 		
 		List<Event> events = eventService.selectAllEvents();
 		
-		for (Event event : events){
+		for (Event event : events) {
 			if(event.getEventTime().isBefore(beforefourHours)){
 					Boolean result = eventService.deleteEvent(event.getEventId());				
 			}
@@ -144,7 +144,6 @@ public class EventController {
 	{
 		HttpSession session = request.getSession();
 		
-		//If user reaches this page without begin logged in, redirect them to login servlet
 		if (session.getAttribute("username") == null)
 		{
 			return "redirect:/login";

@@ -3,21 +3,13 @@ package calendar.DAL;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import calendar.model.Account;
 import calendar.model.Attendance;
-import calendar.model.Event;
 
 @Component("attendanceDAO")
 public class AttendanceDAO implements IAttendanceDAO {
@@ -103,7 +95,6 @@ public class AttendanceDAO implements IAttendanceDAO {
 		TypedQuery<Attendance> query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.accountId = :accountId", Attendance.class);
 		query.setParameter("accountId",accountId);
 		
-		//TODO
 		try {
 			List<Attendance> attendances = query.getResultList();
 			return attendances;

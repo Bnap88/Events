@@ -2,9 +2,7 @@ package calendar.DAL;
 
 import java.util.List;
 
-import calendar.model.Account;
 import calendar.model.Attendance;
-import calendar.model.Event;
 
 public interface IAttendanceDAO {
 	//Insert an Attendance

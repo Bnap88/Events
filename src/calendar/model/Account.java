@@ -16,7 +16,7 @@ import calendar.converter.LocalDateTimeAttributeConverter;
 
 @Entity
 @Table(name = "Account")
-public class Account implements Serializable{
+public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
