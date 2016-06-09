@@ -75,15 +75,12 @@ public class DefaultAttendanceService implements AttendanceService {
 	@Override
 	@Transactional
 	public List<String> getAttendeeNamesViaEventId(int eventId) {
-		System.out.println("line 80 reached");
 		List<Attendance> attendance = attendanceDAO.selectAttendancesByEventId(eventId);
-		System.out.println("line 82 reached");
 		List<String> nameList = new ArrayList<String>();
 		
 		for (Attendance a : attendance)
 		{
 			Account account = accountService.selectAccountById(a.getAccountId());
-			System.out.println("line 88 reached");
 			nameList.add(account.getAccountName());
 		}
 		

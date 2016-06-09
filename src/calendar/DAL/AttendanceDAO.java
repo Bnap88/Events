@@ -80,10 +80,7 @@ public class AttendanceDAO implements IAttendanceDAO {
 		TypedQuery<Attendance> query =  entityManager.createQuery("SELECT p FROM Attendance p WHERE p.eventId = :eventId", Attendance.class);
 		query.setParameter("eventId",eventId);
 		
-		System.out.println("||||||| Line 96 CALLED in AttendanceDAO - Begin");
-		//query.setHint("javax.persistence.query.timeout", 2000);
 		List<Attendance> attendances = query.getResultList();
-		System.out.println("||||||| Line 99 CALLED in AttendanceDAO - end");
 
 		return attendances;
 		

@@ -76,8 +76,6 @@ public class EventController {
 		eventService.insertEvent(eventOne);
 		eventService.insertEvent(eventTwo);
 		eventService.insertEvent(eventThree);
-		
-		System.out.println("line 80 of Event Controller reached - controller constructor finished");
 	}
 	
 	@RequestMapping(value={"events", "", "/"}, method=RequestMethod.GET)
@@ -92,35 +90,24 @@ public class EventController {
 			request.setAttribute("loggedIn", true);
 		}
 		
-		System.out.println("line 95 called - we are in the first initial page request, before delete old events");
 		deleteOldEvents();
 		
 		//Create our "view model"
 		List<Event> tempList = eventService.selectAllEvents(); 
 		
-		System.out.println("tempList size is " + tempList.size());
-		
 		for (Event e : tempList)
 		{
-			System.out.println("**********Event Controller Line 105 - Loop Begin");
 			EventListing eventListing = new EventListing();
 			eventListing.setEvent(e);
 			
-			System.out.println("**********Event Controller Line 109 SelectAccountById : Begin");
 			Account temp = accountService.selectAccountById(e.getCreatorAccountId());
-			System.out.println("**********Event Controller Line 111 SelectAccountById : End");
 			eventListing.setAccountCreatorName(temp.getAccountName());
-			System.out.println("++++++++++++++++ Line 113 EventId is: " + e.getEventId());
-			System.out.println("**********Event Controller Line 114 Get attendee names via event id : Begin");
 			List<String> attendees = attendanceService.getAttendeeNamesViaEventId(e.getEventId());
-			System.out.println("**********Event Controller Line 116 Get attendee names via event id : End");
 			eventListing.setAttendees(attendees);
 			eventsWithAttendance.add(eventListing);	
-			System.out.println("**********Event Controller Line 119 - Loop End");
 		}
 		//End Create
 		
-		System.out.println("Line 116 called in EventController");
 		request.setAttribute("eventsList", eventsWithAttendance);
 		
         return "event/eventslist";
@@ -293,7 +280,6 @@ public class EventController {
 			if (attendance != null)
 			{
 				duplicateAttendee = true;
-				System.out.println("attendance is not null");
 			}
 			
 			//If not already registered, get the user's accountId and put it and eventId in Attendance table
