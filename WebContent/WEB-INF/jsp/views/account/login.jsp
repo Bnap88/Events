@@ -1,4 +1,4 @@
-<%@include file="/WEB-INF/jsp/header.jspf" %>
+<%@include file="/WEB-INF/jsp/header.jsp" %>
 
 <div class="container">
 	<div class="row">
@@ -26,24 +26,14 @@
 			<br /> 
 			<div class="row">
 				<div class="col-md-6 col-sm-6 col-xs-6">
-					<a href="<c:url value='register'>
-				         </c:url>" class="btn btn-primary btn-block">Create Account</a><br /> 
+					<a href="<c:url value='register' />" class="btn btn-primary btn-block">Create Account</a><br /> 
 				</div>
 			</div>
-<% 
-	if ( request.getAttribute("loginFailed") != null && (Boolean)request.getAttribute("loginFailed") )
-	{
-%>
+			<c:if test="${ requestScope.loginFailed != null && requestScope.loginFailed == true }">
 					<p style="color: red;">Incorrect username or password!</p>
-
-<%  }  %>
+			</c:if>
     	</div>  
 	</div>
 </div>
 
-<% 
-	//Set JavaScript files in footer
-	String script = null;
-%>
-
-<%@include file="/WEB-INF/jsp/footer.jspf" %>
+<%@include file="/WEB-INF/jsp/footer.jsp" %>

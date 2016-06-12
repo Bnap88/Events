@@ -1,20 +1,10 @@
-<%@include file="/WEB-INF/jsp/header.jspf" %>
+<%@include file="/WEB-INF/jsp/header.jsp" %>
 <%@ page import="java.util.*, calendar.model.Event, java.util.Date" %>
-<%
-    @SuppressWarnings("unchecked")
-    List<Event> createdEvents =
-            (List<Event>)request.getAttribute("createdEvents");
-	@SuppressWarnings("unchecked")
-	List<Event> likedEvents = 
-			(List<Event>)request.getAttribute("likedEvents");
-	
-	Boolean emptyCreatedEvents = (Boolean) request.getAttribute("emptyCreatedEvents");
-	Boolean emptyLikedEvents = (Boolean) request.getAttribute("emptyLikedEvents");
-%>
+
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			<h2 class="text-center"><b><%= request.getSession().getAttribute("username").toString() %>'s Events</b></h2>
+			<h2 class="text-center"><b><c:out value="${sessionScope.username}"></c:out>'s Events</b></h2>
 		</div>
 	</div>
 	<div class="row">
@@ -22,115 +12,106 @@
 			<h3 class="text-center"><b>Created Events</b></h3>
 		</div>
 	</div>	
-	
-	<% 
-	if ( emptyCreatedEvents == false )
-	{ %> 
-	<div class="row">
-		<div class="col-md-2">
-			<h4 class="text-center">Name</h4>
-		</div>
-		<div class="col-md-2">
-			<h4 class="text-center">Address</h4>
-		</div>
-		<div class="col-md-2">
-			<h4 class="text-center">City</h4>
-		</div>
-		<div class="col-md-2">
-			<h4 class="text-center">State</h4>
-		</div>
-		<div class="col-md-2">
-			<h4 class="text-center">Time</h4>
-		</div>
-	</div>	
-	
-	<% 	for (Event event : createdEvents)
-		{ %>
-		<div class="row">
-			<div class="col-md-2">
-				<p><%= event.getEventName() %></p>
-			</div>
-			<div class="col-md-2">
-				<p><%= event.getEventStreetAddress() %></p>
-			</div>
-			<div class="col-md-2">
-				<p><%= event.getEventCity() %></p>
-			</div>
-			<div class="col-md-2">
-				<p><%= event.getEventState() %></p>
-			</div>
-			<div class="col-md-2">
-				<p><%= event.getEventTime() %></p>
-			</div>
-		</div>
-	 <% } 
-    }
-    else
-    { %> 	
+	<c:choose>
+		<c:when test="${ requestScope.emptyCreatedEvents != null && requestScope.emptyCreateEvents == false }">
+			<div class="row">
+				<div class="col-md-2">
+					<h4 class="text-center">Name</h4>
+				</div>
+				<div class="col-md-2">
+					<h4 class="text-center">Address</h4>
+				</div>
+				<div class="col-md-2">
+					<h4 class="text-center">City</h4>
+				</div>
+				<div class="col-md-2">
+					<h4 class="text-center">State</h4>
+				</div>
+				<div class="col-md-2">
+					<h4 class="text-center">Time</h4>
+				</div>
+			</div>	
+			<c:forEach items="${sessionScope.createdEvents}" var="event">
+				<div class="row">
+					<div class="col-md-2">
+						<p>${event.eventName}</p>
+					</div>
+					<div class="col-md-2">
+						<p>${event.eventaStreetAddress}</p>
+					</div>
+					<div class="col-md-2">
+						<p>${event.eventCity}</p>
+					</div>
+					<div class="col-md-2">
+						<p>${event.eventState}</p>
+					</div>
+					<div class="col-md-2">
+						<p>${event.eventTime}</p>
+					</div>
+				</div>
+			</c:forEach>
+		</c:when>
+		<c:otherwise>
     	<div class="row">	
   			<div class="col-md-6">
   				<h4 class="text-center">No Created Events</h4>
   			</div>
   		</div>
-<%  } %>
+		</c:otherwise>	
+	</c:choose>
 	<div class="row">
 		<div class="col-md-6 col-md-offset-2">
 			<h3 class="text-center"><b>Liked Events</b></h3>
 		</div>
 	</div>	
-  <% if ( emptyLikedEvents == false )
-	{ %> 
-		<div class="row">
-			<div class="col-md-2">
-				<h4 class="text-center">Name</h4>
-			</div>
-			<div class="col-md-2">
-				<h4 class="text-center">Address</h4>
-			</div>
-			<div class="col-md-2">
-				<h4 class="text-center">City</h4>
-			</div>
-			<div class="col-md-2">
-				<h4 class="text-center">State</h4>
-			</div>
-			<div class="col-md-2">
-				<h4 class="text-center">Time</h4>
-			</div>
-		</div>	
-	<% 
-		   for (Event event : likedEvents)
-		   { %>
+	<c:choose>
+		<c:when test="${requestScope.emptyLikedEvents != null  && requestScope.emptyLikedEvents == false }">
+			<div class="row">
+				<div class="col-md-2">
+					<h4 class="text-center">Name</h4>
+				</div>
+				<div class="col-md-2">
+					<h4 class="text-center">Address</h4>
+				</div>
+				<div class="col-md-2">
+					<h4 class="text-center">City</h4>
+				</div>
+				<div class="col-md-2">
+					<h4 class="text-center">State</h4>
+				</div>
+				<div class="col-md-2">
+					<h4 class="text-center">Time</h4>
+				</div>
+			</div>	
+			<c:forEach items="${sessionScope.likedEvents}" var="event">
 				<div class="row">
 					<div class="col-md-2">
-						<p><%= event.getEventName() %></p>
+						<p>${event.eventName}</p>
 					</div>
 					<div class="col-md-2">
-						<p><%= event.getEventStreetAddress() %></p>
+						<p>${event.eventStreetAddress}</p>
 					</div>
 					<div class="col-md-2">
-						<p><%= event.getEventCity() %></p>
+						<p>${event.eventCity}</p>
 					</div>
 					<div class="col-md-2">
-						<p><%= event.getEventState() %></p>
+						<p>${event.eventState}</p>
 					</div>
 					<div class="col-md-2">
-						<p><%= event.getEventTime() %></p>
+						<p>${event.eventTime}</p>
 					</div>
 				</div>
-	    <% }
-	}
-	else
-	{ %> <div class="row">
-   			<div class="col-md-6">
-   				<h4 class="text-center">No Liked Events</h4>
-   			</div>
-   		</div>
-  <% } %>
-
+			</c:forEach>
+		</c:when>
+		<c:otherwise>
+		 	<div class="row">
+	   			<div class="col-md-6">
+	   				<h4 class="text-center">No Liked Events</h4>
+	   			</div>
+	   		</div>
+ 		</c:otherwise>
+	</c:choose>
 	
 </div>
-<% 
-	//Set JavaScript files in footer
-	String script = null;
-%>
-<%@include file="/WEB-INF/jsp/footer.jspf" %>
+
+<%@include file="/WEB-INF/jsp/footer.jsp" %>

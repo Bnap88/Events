@@ -1,8 +1,7 @@
-<%
-boolean loggedIn = false;
-if (session.getAttribute("username") != null)
-	loggedIn = true;
-%>
+<c:set var="loggedIn" value="false"/>
+<c:if test="${sessionScope.username != null}">
+	<c:set var="loggedIn" value="true"/>
+</c:if>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -29,18 +28,21 @@ if (session.getAttribute("username") != null)
         </div>
         <!-- Collection of nav links and other content for toggling -->
         <div id="navbarCollapse" class="collapse navbar-collapse">
-         <% if (loggedIn == true) { %>
-            <ul class="nav navbar-nav">
-                <li><a href="<c:url value='/events/accountevents'></c:url>">My Account</a></li>
-                <li><a href="<c:url value='/events/create'></c:url>">Create Event</a></li>
-            </ul> <% } %>
+	        <c:if test="${loggedIn == true}">
+	            <ul class="nav navbar-nav">
+	                <li><a href="<c:url value='/events/accountevents'></c:url>">My Account</a></li>
+	                <li><a href="<c:url value='/events/create'></c:url>">Create Event</a></li>
+	            </ul> 
+			</c:if>
             <ul class="nav navbar-nav navbar-right">
-            <% if (loggedIn == true)
-            	   { %>
+            <c:choose>
+            	<c:when test="${loggedIn == true}">
                 	<li><a href="<c:url value='/account/logout'></c:url>">Logout</a></li>
-                <% } else { %>
+                </c:when>
+                <c:otherwise>
                 	<li><a href="<c:url value='/account/login'></c:url>">Login</a></li>
-                <% } %>
+                </c:otherwise>
+            </c:choose>
             </ul>
         </div>
     </nav>

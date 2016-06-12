@@ -1,4 +1,5 @@
-<%@include file="/WEB-INF/jsp/header.jspf" %>
+<%@include file="/WEB-INF/jsp/header.jsp" %>
+
 <div class="container">
 	<div class="row">
 		<div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
@@ -24,29 +25,19 @@
 					<label for="password">Confirm Password:</label>
 					<input type="password" class="form-control" name="passwordMatch" />
 				</div>
-				
-				<% 
-	if ( request.getAttribute("createFailed") != null && (Boolean)request.getAttribute("createFailed") )
-	{
-%>
-	<p style="color: red;">You must fill out all of the fields!</p>
-<%  } 
-	else if (request.getAttribute("duplicateName") != null && (Boolean)request.getAttribute("duplicateName"))
-	{
-	%>
-	<p style="color: red;">Account Name Already Exists!</p>
-<%  } %>
-				
+				<c:choose>
+					<c:when test="${ requestScope.createFailed != null && requestScope.createFailed == true }">
+						<p style="color: red;">You must fill out all of the fields!</p>
+					</c:when>
+					<c:when test="${ requestScope.duplicateName != null && requestScope.duplicateName == true }">
+						<p style="color: red;">Account Name Already Exists!</p>
+					</c:when>
+				</c:choose>
 				<button type="submit" class="btn btn-primary">Create</button>
 			</form>
 		</div>
 	</div>
 </div>
+<c:set var="script" value="/resources/js/registrationValidation.js"></c:set>
 
-<% 
-	//Set JavaScript files in footer
-	String script = "/resources/js/registrationValidation.js";
-	
-%>
-
-<%@include file="/WEB-INF/jsp/footer.jspf" %>
+<%@include file="/WEB-INF/jsp/footer.jsp" %>
