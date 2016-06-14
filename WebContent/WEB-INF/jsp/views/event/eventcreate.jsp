@@ -1,4 +1,5 @@
 <%@include file="/WEB-INF/jsp/header.jsp" %>
+
 <form action="create" method="POST">
 <% 
 	if ( request.getAttribute("createFailed") != null )
@@ -54,8 +55,4 @@
 	<input type="submit" />
 </form>
 
-<% 
-	//Set JavaScript files in footer
-	String script = null;
-%>
 <%@include file="/WEB-INF/jsp/footer.jsp"  %>

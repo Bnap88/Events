@@ -133,7 +133,7 @@ public class EventController {
 		
 		if (session.getAttribute("username") == null)
 		{
-			return "redirect:/login";
+			return "redirect:/account/login";
 		}
 		else
 		{		
@@ -157,6 +157,7 @@ public class EventController {
 			//Get the user's accountId
 			Account tempAccount = accountService.selectAccountByName(username);
 			int accountId = tempAccount.getAccountId();
+			session.setAttribute("accountId", accountId);
 			
 			//Get all events created by the user
 			List<Event> createdEvents = eventService.selectEventsByCreatorId(accountId);
