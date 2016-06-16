@@ -3,6 +3,7 @@ package calendar.controllers;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -203,16 +204,13 @@ public class EventController {
 		String eventcity = request.getParameter("eventCity");
 		String eventstate = request.getParameter("eventState");
 		String eventaddress = request.getParameter("eventStreetAddress");
-		String year = request.getParameter("year");
-		String month = request.getParameter("month");
-		String day = request.getParameter("day");
+		String date = request.getParameter("date");
 		String hour = request.getParameter("hour");
 		String minute = request.getParameter("minute");
 
 		if (eventname.equals("") || eventcity.equals("")
 				|| eventstate.equals("") || eventaddress.equals("")
-				|| year.equals("") || month.equals("") 
-				|| day.equals("") || hour.equals("")
+				|| date.equals("") || hour.equals("")
 				|| minute.equals(""))
 		{
 			request.setAttribute("createFailed", true);
@@ -222,15 +220,14 @@ public class EventController {
 		
 		String eventcreator = (String) session.getAttribute("username");
 		
-		int eventyear = Integer.parseInt(year);
-		int eventmonth = Integer.parseInt(month);
-		int eventday = Integer.parseInt(day);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		LocalDate localdate = LocalDate.parse(date, formatter);
+				
 		int eventhour = Integer.parseInt(hour);
 		int eventminute = Integer.parseInt(minute);
-		
 		LocalTime time = LocalTime.of(eventhour, eventminute);
-		LocalDate date = LocalDate.of(eventyear, eventmonth, eventday);
-		LocalDateTime eventDateTime = LocalDateTime.of(date, time);
+
+		LocalDateTime eventDateTime = LocalDateTime.of(localdate, time);
 		
 		int dateTimeCheckerForPastEvent = eventDateTime.compareTo(LocalDateTime.now());
 		
@@ -307,4 +304,39 @@ public class EventController {
 		}	
 	}
 	
+	@RequestMapping(value="events/unlike", method=RequestMethod.POST)
+	private String unsubscribeToEvent(HttpSession session, HttpServletRequest request, @RequestParam("eventId") String eventIdNumber) {
+		
+		if (session.getAttribute("username") == null)
+        {
+			return "redirect:/account/login";
+        }
+		else
+		{
+			//Get the user's accountId 
+			String username = (String) session.getAttribute("username");
+			Integer accountId = accountService.selectAccountByName(username).getAccountId();
+			
+			//Get the eventId int from the requestParam "eventId"
+			String trimmed = eventIdNumber.trim();
+			Integer eventId = Integer.parseInt(trimmed);
+			
+			//Check if event is already "unliked" by the user
+			Attendance attendance = attendanceService.selectAttendanceByIds(accountId, eventId);
+			if (attendance != null)
+			{
+				Boolean result = attendanceService.deleteAttendance(accountId,  eventId);
+				
+				//If Attendance addition failed, redirect to error page
+				if (result == false)
+					request.setAttribute("error", "Error deleting event attendance.");
+			}
+			else
+			{
+				request.setAttribute("error", "Event attendance already deleted!");
+			}
+			
+			return "redirect:/events/accountevents";
+		}
+	}
 }

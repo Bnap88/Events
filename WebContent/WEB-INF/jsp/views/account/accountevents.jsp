@@ -49,7 +49,7 @@
 						<p>${event.eventTime}</p>
 					</div>
 					<div class="col-xs-1">
-					  	<form action="/events/delete" method="POST">
+					  	<form action="events/delete" method="POST">
 					  		<input type="submit" value="Delete" class="btn btn-danger"/>
 					  		<input type="hidden" name="eventId" value="${event.eventId}" />
 					  	</form>
@@ -70,6 +70,13 @@
 			<h3 class="text-center"><b>Liked Events</b></h3>
 		</div>
 	</div>	
+	<c:if test="${ not empty error }">
+		<div class="row">
+			<div class="col-xs-12">
+				<h3 class="text-center error"><b>${error}</b></h3>
+			</div>
+		</div>	
+	</c:if>
 	<c:choose>
 		<c:when test="${ not empty emptyLikedEvents  && emptyLikedEvents == false }">
 			<div class="row">
@@ -107,10 +114,9 @@
 						<p>${event.eventTime}</p>
 					</div>
 					<div class="col-xs-1">
-					  	<form action="/events/unlike" method="POST">
+					  	<form action="<c:url value='/events/unlike' />" method="POST">
 					  		<input type="submit" value="Unlike" class="btn btn-warning"/>
 					  		<input type="hidden" name="eventId" value="${event.eventId}" />
-					  		<input type="hidden" name="accountId" value="${sessionScope.accountId}" />
 					  	</form>
 					</div>
 				</div>

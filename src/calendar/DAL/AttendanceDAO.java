@@ -46,7 +46,7 @@ public class AttendanceDAO implements IAttendanceDAO {
 	@Override
 	public Boolean deleteAttendance(int accountId, int eventId) {
 		
-		Integer result = entityManager.createQuery("DELETE FROM Attendance a WHERE a.accountId = :accountId AND a.eventId = :eventId", Attendance.class).
+		Integer result = entityManager.createQuery("DELETE FROM Attendance a WHERE a.accountId = :accountId AND a.eventId = :eventId").
 			setParameter("accountId", accountId).
 			setParameter("eventId", eventId).
 			executeUpdate();

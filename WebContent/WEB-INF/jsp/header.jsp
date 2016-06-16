@@ -10,7 +10,11 @@
 		
 		<title>Social Calendar</title>
 		
+		
+		<link type="text/css" rel="stylesheet" href="https://code.jquery.com/ui/1.12.0-rc.1/themes/smoothness/jquery-ui.css" />
+		
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+		 
 		<link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/styles.css" />" />
 	</head>
 <body>

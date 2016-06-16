@@ -3,3 +3,7 @@
 .margin-twenty {
 	margin-top: 20px;
 }
+
+.error {
+	color: red;
+}

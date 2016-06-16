@@ -59,7 +59,7 @@
 				  	</div>
 					<c:if test="${not empty requestScope.loggedIn && requestScope.loggedIn == true }">
 						<div class="col-xs-1 col-xs-offset-1">
-					  		<form action="/events/like" method="POST">
+					  		<form action="events/like" method="POST">
 					  			<input type="submit" value="Like" class="btn btn-primary"/>
 					  			<input type="hidden" name="eventId" value="${eventlisting.event.eventId}" />
 					  		</form>
